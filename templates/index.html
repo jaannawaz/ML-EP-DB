@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gene Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; }
+        button { padding: 10px 20px; background-color: #007BFF; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .results { margin-top: 20px; padding: 15px; background-color: #f8f9fa; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gene Prediction</h1>
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="Pathway">Pathway</label>
+                <input type="number" step="any" id="Pathway" name="Pathway" required>
+            </div>
+            <div class="form-group">
+                <label for="CADD_Score_normalized">CADD Score Normalized</label>
+                <input type="number" step="any" id="CADD_Score_normalized" name="CADD_Score_normalized" required>
+            </div>
+            <div class="form-group">
+                <label for="Log_FC_normalized">Log FC Normalized</label>
+                <input type="number" step="any" id="Log_FC_normalized" name="Log_FC_normalized" required>
+            </div>
+            <div class="form-group">
+                <label for="MGI_Phenotpe_normalized">MGI Phenotype Normalized</label>
+                <input type="number" step="any" id="MGI_Phenotpe_normalized" name="MGI_Phenotpe_normalized" required>
+            </div>
+            <div class="form-group">
+                <label for="Phen2Gene_Score_normalized">Phen2Gene Score Normalized</label>
+                <input type="number" step="any" id="Phen2Gene_Score_normalized" name="Phen2Gene_Score_normalized" required>
+            </div>
+            <div class="form-group">
+                <label for="EP_Asso_normalized">EP Association Normalized</label>
+                <input type="number" step="any" id="EP_Asso_normalized" name="EP_Asso_normalized" required>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+        <div class="results" id="results" style="display: none;">
+            <h2>Prediction Results</h2>
+            <p><strong>Weighted Score:</strong> <span id="weightedScore"></span></p>
+            <p><strong>Predicted Class:</strong> <span id="predictedClass"></span></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (data.error) {
+                alert('Error: ' + data.error);
+            } else {
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('weightedScore').textContent = data.weighted_score.toFixed(3);
+                document.getElementById('predictedClass').textContent = data.predicted_class;
+            }
+        });
+    </script>
+</body>
+</html>

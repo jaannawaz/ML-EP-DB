@@ -1,0 +1,5 @@
+4  Phen2Gene_Score_normalized    0.692994
+1       CADD_Score_normalized    0.113695
+3     MGI_Phenotpe_normalized    0.084980
+2           Log_FC_normalized    0.074518
+0      No_Pathways_normalized    0.033813
